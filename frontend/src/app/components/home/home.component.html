@@ -1,0 +1,68 @@
+<div class="home-container">
+  <div class="header">
+    <h1>
+      <span class="logo-icon">📋</span>
+      Pastebin Lite
+    </h1>
+    <p class="subtitle">Share code and text snippets instantly</p>
+  </div>
+
+  <!-- Success State -->
+  <div class="success-card" *ngIf="createdPaste">
+    <div class="success-icon">✓</div>
+    <h2>Paste Created Successfully!</h2>
+
+    <div class="paste-url-box">
+      <input type="text" [value]="createdPaste.id" readonly class="url-input" />
+      <button class="copy-btn" (click)="copyUrl()" [class.copied]="copied">
+        {{ copied ? '✓ Copied!' : '📋 Copy URL' }}
+      </button>
+    </div>
+
+    <div class="paste-info">
+      <div class="info-item" *ngIf="createdPaste.expiresAt">
+        <span class="info-label">Expires:</span>
+        <span class="info-value">{{ createdPaste.expiresAt | date:'medium' }}</span>
+      </div>
+      <div class="info-item" *ngIf="createdPaste.maxViews">
+        <span class="info-label">Max Views:</span>
+        <span class="info-value">{{ createdPaste.maxViews }}</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" (click)="viewPaste()">View Paste</button>
+      <button class="btn btn-secondary" (click)="reset()">Create New</button>
+    </div>
+  </div>
+
+  <!-- Create Form -->
+  <div class="create-card" *ngIf="!createdPaste">
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div class="form-group">
+      <label for="content">Paste Content</label>
+      <textarea id="content" [(ngModel)]="content" placeholder="Paste your code or text here..." rows="15"
+        class="content-textarea"></textarea>
+    </div>
+
+    <div class="options-row">
+      <div class="form-group">
+        <label for="ttl">Expires in (seconds)</label>
+        <input id="ttl" type="number" [(ngModel)]="ttlSeconds" placeholder="Optional" min="1" class="option-input" />
+      </div>
+
+      <div class="form-group">
+        <label for="maxViews">Max Views</label>
+        <input id="maxViews" type="number" [(ngModel)]="maxViews" placeholder="Optional" min="1" class="option-input" />
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-create" (click)="createPaste()" [disabled]="isLoading || !content.trim()">
+      <span *ngIf="isLoading">Creating...</span>
+      <span *ngIf="!isLoading">🚀 Create Paste</span>
+    </button>
+  </div>
+</div>
