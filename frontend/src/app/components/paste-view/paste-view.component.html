@@ -1,0 +1,61 @@
+<div class="paste-view-container">
+    <div class="header">
+        <button class="back-btn" (click)="goHome()">
+            ← Back to Home
+        </button>
+        <h1>
+            <span class="logo-icon">📋</span>
+            Pastebin Lite
+        </h1>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-card" *ngIf="isLoading">
+        <div class="loader"></div>
+        <p>Loading paste...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-card" *ngIf="errorMessage && !isLoading">
+        <div class="error-icon">⚠️</div>
+        <h2>{{ errorMessage }}</h2>
+        <button class="btn btn-primary" (click)="goHome()">Go Home</button>
+    </div>
+
+    <!-- Paste Content -->
+    <div class="paste-card" *ngIf="paste && !isLoading">
+        <div class="paste-header">
+            <div class="paste-meta">
+                <div class="meta-item">
+                    <span class="meta-label">ID:</span>
+                    <span class="meta-value">{{ paste.id }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Created:</span>
+                    <span class="meta-value">{{ formatDate(paste.createdAt) }}</span>
+                </div>
+                <div class="meta-item" *ngIf="paste.expiresAt">
+                    <span class="meta-label">Expires:</span>
+                    <span class="meta-value">{{ formatDate(paste.expiresAt) }}</span>
+                </div>
+                <div class="meta-item" *ngIf="paste.maxViews">
+                    <span class="meta-label">Views:</span>
+                    <span class="meta-value">{{ paste.currentViews }} / {{ paste.maxViews }}</span>
+                </div>
+            </div>
+
+            <div class="paste-actions">
+                <button class="action-btn" (click)="copyContent()" [title]="copied ? 'Copied!' : 'Copy Content'">
+                    {{ copied ? '✓' : '📋' }}
+                </button>
+                <button class="action-btn" (click)="copyUrl()" title="Copy URL">
+                    🔗
+                </button>
+            </div>
+        </div>
+
+        <div class="paste-content">
+            <pre><code>{{ paste.content }}</code></pre>
+        </div>
+    </div>
+</div>
